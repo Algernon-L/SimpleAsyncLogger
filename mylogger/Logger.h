@@ -1,12 +1,12 @@
 #pragma once
-#include "Timestamp.h"
+#include "LogTimestamp.h"
 #include "LogStream.h"
 #include "LogConfig.h"
 #include "LogAppenderInterface.h"
 #include "LogLevel.h"
 #include <unordered_map>
 class LogStream;
-class Timestamp;
+class LogTimestamp;
 class Logger
 {
 public:
@@ -61,7 +61,7 @@ private:
         void formatTime();
         void finish();
 
-        Timestamp time_;
+        LogTimestamp time_;
         LogStream stream_;
         LogLevel level_;
         int line_;
@@ -76,6 +76,12 @@ private:
   Logger(__FILE__, __LINE__, LogLevel::DEBUG).stream()
 #define LOG_INFO if (LogConfig::getInstance().log_level <= LogLevel::INFO) \
   Logger(__FILE__, __LINE__, LogLevel::INFO).stream()
-#define LOG_WARN Logger(__FILE__, __LINE__, Logger::WARN).stream()
-#define LOG_ERROR Logger(__FILE__, __LINE__, Logger::ERROR).stream()
-#define LOG_FATAL Logger(__FILE__, __LINE__, Logger::FATAL).stream()
+#define LOG_WARN if (LogConfig::getInstance().log_level <= LogLevel::WARN) \
+  Logger(__FILE__, __LINE__, LogLevel::WARN).stream()
+#define LOG_ERROR if (LogConfig::getInstance().log_level <= LogLevel::ERROR) \
+  Logger(__FILE__, __LINE__, LogLevel::ERROR).stream()
+#define LOG_FATAL if (LogConfig::getInstance().log_level <= LogLevel::FATAL) \
+  Logger(__FILE__, __LINE__, LogLevel::FATAL).stream()
+// #define LOG_WARN Logger(__FILE__, __LINE__, Logger::WARN).stream()
+// #define LOG_ERROR Logger(__FILE__, __LINE__, Logger::ERROR).stream()
+// #define LOG_FATAL Logger(__FILE__, __LINE__, Logger::FATAL).stream()

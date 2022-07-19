@@ -1,25 +1,25 @@
-#include "Timestamp.h"
+#include "LogTimestamp.h"
 
 #include <time.h>
 
 #include <iostream>
-Timestamp Timestamp::now() {
+LogTimestamp LogTimestamp::now() {
     struct timeval tv;
     if (gettimeofday(&tv, nullptr)) {
-        return Timestamp();
+        return LogTimestamp();
     }
-    return Timestamp(tv.tv_sec * kMicroSecondsPerSecond + tv.tv_usec);
+    return LogTimestamp(tv.tv_sec * kMicroSecondsPerSecond + tv.tv_usec);
 }
 
-time_t Timestamp::getSec() const {
+time_t LogTimestamp::getSec() const {
     return microseconds_from_epoch_ / kMicroSecondsPerSecond;
 }
 
-suseconds_t Timestamp::getUsec() const {
+suseconds_t LogTimestamp::getUsec() const {
     return microseconds_from_epoch_ % kMicroSecondsPerSecond;
 }
 
-std::string Timestamp::nowStrTime() {
+std::string LogTimestamp::nowStrTime() {
     time_t timep;
     time(&timep);
     char res[64];

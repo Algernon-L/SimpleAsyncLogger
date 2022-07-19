@@ -1,11 +1,9 @@
 #include "Logger.h"
-#include "Timestamp.h"
 #include "LogConfig.h"
 
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
-
 #include <sstream>
 #include <thread>
 
@@ -50,7 +48,7 @@ inline LogStream& operator<<(LogStream& s, const Logger::SourceFile& v)
 
 // 构造一个Impl用于每条日志的输出
 Logger::Impl::Impl(LogLevel level, int savedErrno, const SourceFile& file, int line)
-  : time_(Timestamp::now()),
+  : time_(LogTimestamp::now()),
     stream_(),
     level_(level),
     line_(line),
@@ -69,8 +67,8 @@ Logger::Impl::Impl(LogLevel level, int savedErrno, const SourceFile& file, int l
 void Logger::Impl::formatTime()
 {
     int64_t microSecondsSinceEpoch = time_.getMicroSecondsFromEpoch();
-    time_t seconds = static_cast<time_t>(microSecondsSinceEpoch / Timestamp::kMicroSecondsPerSecond);
-    int microseconds = static_cast<int>(microSecondsSinceEpoch % Timestamp::kMicroSecondsPerSecond);
+    time_t seconds = static_cast<time_t>(microSecondsSinceEpoch / LogTimestamp::kMicroSecondsPerSecond);
+    int microseconds = static_cast<int>(microSecondsSinceEpoch % LogTimestamp::kMicroSecondsPerSecond);
     if (seconds != t_lastSecond)
     {
         t_lastSecond = seconds;

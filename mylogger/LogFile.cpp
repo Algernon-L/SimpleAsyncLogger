@@ -9,7 +9,6 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <iostream>
 
 
 // 负责追加到后端 和 写入到磁盘还是mmap
@@ -21,13 +20,11 @@ public:
     MMapFileWriter(const std::string &basename, uint32_t mem_size):
     mem_size_(mem_size)
     {
-        std::cout << "24\n";
         writed_ = 0;
         if (fd_ >= 0) {
             close(fd_);
         }
 
-        std::cout << "30\n";
         // 打开一个新文件 读写 | 不存在则创建它 | 用户读写 | 其他人只读
         fd_ = open(basename.c_str(), O_RDWR | O_CREAT, 
                     S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
@@ -35,7 +32,6 @@ public:
         // 打开文件失败
         if (fd_ < 0) 
         {
-            std::cout << "38\n";
             fprintf(stderr, "open new file failed,errno=%d", errno);
         } else {
             // ftruncate()会将参数fd指定的文件大小改为参数length指定的大小。
@@ -45,7 +41,6 @@ public:
                                     MAP_SHARED, fd_, 0);
             if (buffer_ == MAP_FAILED) {
                 fprintf(stderr, "mmap file failed,errno=%d", errno);
-                std::cout << "47\n";
             }
         }
     }
@@ -94,7 +89,6 @@ public:
     AppendFileWriter(const std::string &filename):
         fp_(::fopen(filename.c_str(), "ae")) 
     {
-    std::cout << "96\n";
     ::setbuffer(fp_, buffer_, sizeof buffer_);
     }
 
@@ -228,10 +222,8 @@ bool LogFile::rollFile() {
         last_flush_ = now;
         start_of_period_ = start;
         if (file_writer_type_ == FileWriterType::MMAPFILE) {
-            std::cout << "file_.reset(new MMapFileWriter(filename, roll_size_));\n"; 
             file_.reset(new MMapFileWriter(filename, roll_size_));
         } else {
-            std::cout << "file_.reset(new AppendFileWriter(filename));\n"; 
             file_.reset(new AppendFileWriter(filename));
         }
     }
