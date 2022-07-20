@@ -4,6 +4,13 @@ using namespace std;
 
 int main(){
     
+    // 日志配置
+    LogConfig::getInstance().log_buffer_nums = 2;
+    LogConfig::getInstance().log_buffer_size = 64 * 1024;
+    LogConfig::getInstance().log_flush_file_size = 64 * 1024 *1024;
+    LogConfig::getInstance().log_flush_interval = 3;
+    LogConfig::getInstance().log_level = LogLevel::INFO;
+
     LogConfig::getInstance().addAppender(
     "appendfile", LogAppenderInterface::Ptr(new AsyncFileAppender("./logappend/", FileWriterType::APPENDFILE)));
     
