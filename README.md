@@ -18,9 +18,12 @@ sudo ./build.sh
 ```
 具体可参考`example/`中的测试文件
 
+
+
 ### 执行流程图
 
 <div align=center><img src="/pic/Loggerdescription.png" height=""/> </div>
+<div align=center><img src="/pic/testdemo.png" height=""/> </div>
 
 ### References
 [[1]](https://github.com/chenshuo/muduo)Event-driven network library for multi-threaded Linux server in C++11 
